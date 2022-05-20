@@ -146,3 +146,11 @@ cp config.py /home/$username/.config/qtile/
 read -p "Press anykey to continue" stop
 
 chown $username:$username /home/$username/.config/qtile/config.py
+
+#Install Virt-Manager
+pacman -S --noconfirm dmidecode dnsmasq openbsd-netcat iptables-nft libvirt qemu-full
+pacman -S --noconfirm virt-manager virt-viewer
+
+#Add user to libvirt group
+usermod -aG libvirt $username
+
