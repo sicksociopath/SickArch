@@ -63,7 +63,7 @@ pacman -S --noconfirm alacritty
 read -p "Press anykey to continue" stop
 
 #Install Shell Tools
-pacman -S --noconfirm git neofetch htop ntfs-3g zip unzip android-tools aria2
+pacman -S --noconfirm git neofetch htop ntfs-3g zip unzip android-tools aria2 rust
 
 read -p "Press anykey to continue" stop
 
@@ -176,3 +176,19 @@ sed -i "103 i greeter-session=lightdm-webkit2-greeter" /etc/lightdm/lightdm.conf
 
 #Start LightDM service
 systemctl enable lightdm
+
+#Edit /etc/makepkg.conf
+var=$(nproc)
+cp /etc/makepkg.conf /etc/makepkg.conf.backup
+sed -i "50 i MAKEFLAGS=\"-j$var\"" /etc/makepkg.conf
+sed '139d' /etc/makepkg.conf
+sed '140d' /etc/makepkg.conf
+sed -i "139 i COMPRESSXZ=(xz -c -z --threads=0 -)" /etc/makepkg.conf
+sed -i "140 i COMPRESSZST=(zstd -c -z -q --threads=0 -)" /etc/makepkg.conf
+
+#Install PARU
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si
+cd /SickArch
+rm -rf paru
