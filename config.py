@@ -154,6 +154,5 @@ auto_minimize = True
 wmname = "LG3D"
 
 #StartUp
-os.system("feh --bg-fill /home/axkirian/Pictures/Wallpapers/Wallpaper_2.jpg")
 os.system("nm-applet &")
 os.system("powerkit &")

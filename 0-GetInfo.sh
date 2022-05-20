@@ -104,4 +104,3 @@ echo "group = "$username"" >> temp.txt
 echo "unix_sock_group = "libvirt"" >> temp.txt
 echo "unix_sock_ro_perms = "0777"" >> temp.txt
 echo "unix_sock_rw_perms = "0770"" >> temp.txt
-

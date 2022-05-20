@@ -3,6 +3,11 @@
 chipg=$(sed -n '7{p;q}' temp.txt)
 username=$(sed -n '8{p;q}' temp.txt)
 usernamepasswd=$(sed -n '9{p;q}' temp.txt)
+user_libvirt=$(sed -n '11{p;q}' temp.txt)
+group_libvirt=$(sed -n '12{p;q}' temp.txt)
+qemu_group_libvirt=$(sed -n '13{p;q}' temp.txt)
+qemu_ro_libvirt=$(sed -n '14{p;q}' temp.txt)
+qemu_rw_libvirt=$(sed -n '15{p;q}' temp.txt)
 
 #Audio Install
 pacman -S --noconfirm alsa-card-profiles alsa-firmware alsa-plugins alsa-tools alsa-utils
@@ -141,6 +146,7 @@ chown $username:$username /home/$username/.config/qtile
 
 read -p "Press anykey to continue" stop
 
+sed -i "157 i os.system(\"feh --bg-fill /home/$username/Pictures/Wallpapers/Wallpaper_2.jpg\")" config.py
 cp config.py /home/$username/.config/qtile/
 
 read -p "Press anykey to continue" stop
@@ -148,9 +154,25 @@ read -p "Press anykey to continue" stop
 chown $username:$username /home/$username/.config/qtile/config.py
 
 #Install Virt-Manager
-pacman -S --noconfirm dmidecode dnsmasq openbsd-netcat iptables-nft libvirt qemu-full
+pacman -S --noconfirm dmidecode dnsmasq openbsd-netcat libvirt qemu-full
+yes | pacman -S --noconfirm iptables-nft
 pacman -S --noconfirm virt-manager virt-viewer
 
 #Add user to libvirt group
 usermod -aG libvirt $username
 
+#Edit Configs for Virt-Manager
+sed -i "520 i $user_qemu" /etc/libvirt/qemu.conf
+sed -i "525 i $group_qemu" /etc/libvirt/qemu.conf
+sed -i "82 i $group_libvirt" /etc/libvirt/libvirtd.conf
+sed -i "93 i $ro_libvirt" /etc/libvirt/libvirtd.conf
+sed -i "107 i $rw_libvirt" /etc/libvirt/libvirtd.conf
+
+#Start libvirt service
+systemctl enable libvirtd --now
+
+#Edit LightDM
+sed -i "103 i greeter-session=lightdm-webkit2-greeter" /etc/lightdm/lightdm.conf
+
+#Start LightDM service
+systemctl enable lightdm
