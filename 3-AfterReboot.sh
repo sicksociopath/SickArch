@@ -146,3 +146,10 @@ sed '139d' /etc/makepkg.conf
 sed '140d' /etc/makepkg.conf
 sed -i "139 i COMPRESSXZ=(xz -c -z --threads=0 -)" /etc/makepkg.conf
 sed -i "140 i COMPRESSZST=(zstd -c -z -q --threads=0 -)" /etc/makepkg.conf
+
+#Config MPV video decoding using GPU
+echo "hwdec=auto" > /etc/mpv/mpv.conf
+
+#MPV Youtube Script
+cp youtube.sh /usr/local/bin
+cp youtubeaudio.sh /usr/local/bin
