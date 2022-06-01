@@ -36,8 +36,8 @@ Get internet connection. Ethernet usually works out of the box. For wifi:
 Configure wpa_supplicant by writting the next .conf file:
 
 ```
-echo "ctrl_interface=/run/wpa_supplicant > /etc/wpa_supplicant.conf"
-echo "update_config=1" >> /etc/wpa_supplicant.conf
+echo "ctrl_interface=/run/wpa_supplicant" > /etc/wpa_supplicant/wpa_supplicant.conf
+echo "update_config=1" >> /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
 Start wpa_supplicant by:

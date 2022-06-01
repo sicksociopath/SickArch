@@ -146,10 +146,3 @@ sed '139d' /etc/makepkg.conf
 sed '140d' /etc/makepkg.conf
 sed -i "139 i COMPRESSXZ=(xz -c -z --threads=0 -)" /etc/makepkg.conf
 sed -i "140 i COMPRESSZST=(zstd -c -z -q --threads=0 -)" /etc/makepkg.conf
-
-##Install PARU
-#git clone https://aur.archlinux.org/paru.git
-#cd paru
-#makepkg -si
-#cd /SickArch
-#rm -rf paru
