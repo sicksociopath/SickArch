@@ -112,6 +112,13 @@ pacman -S --noconfirm keepassxc mpv signal-desktop thunderbird nm-connection-edi
 
 read -p "Press anykey to continue" stop
 
+#ani-cli
+git clone https://github.com/pystardust/ani-cli
+chmod +x /ani-cli/ani-cli
+cp /ani-cli/usr/local/bin/
+
+read -p "Press anykey to continue" stop
+
 #Move Wallpaper
 mkdir /home/$username/Pictures
 chown $username:$username /home/$username/Pictures
