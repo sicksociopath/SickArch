@@ -54,12 +54,6 @@ else
 	echo "UEFI system detected"
 fi
 
-#Network Configuration
-read -p "Name Your Box: " hostn
-
-#Root Password
-read -p "Insert Password For Root: " rootpasswd
-
 #MicroCode
 if lscpu | grep -E 'GenuineIntel'; then
 	chip=1
@@ -84,21 +78,38 @@ elif lspci | grep 'VGA' | grep -E "Red Hat, Inc. Virtio GPU"; then
 	echo "Virtio GPU Detected"
 fi
 
+#Network Configuration
+read -p "Name Your Box: " hostn
+
+#Root Password
+read -p "Insert Password For Root: " rootpasswd
+
 #User Info
 read -p "Insert User Name: " username
 read -p $"Insert Password For ${username}: " usernamepasswd
 
 #Write to File
+#Selected disk
 echo $disk > temp.txt
+#SWAP selection
 echo $swapyes >> temp.txt
+#EFI detection
 echo $efiyes >> temp.txt
+#Host name
 echo $hostn >> temp.txt
+#Root Passwd
 echo "root:${rootpasswd}" >> temp.txt
+#Processor type
 echo $chip >> temp.txt
+#GPU type
 echo $chipg >> temp.txt
+#Username
 echo $username >> temp.txt
+#New user passwd
 echo "${username}:${usernamepasswd}" >> temp.txt
+#RAM amount
 echo $rammem >> temp.txt
+#Virt-Manager config
 echo "user = "$username"" >> temp.txt
 echo "group = "$username"" >> temp.txt
 echo "unix_sock_group = "libvirt"" >> temp.txt
