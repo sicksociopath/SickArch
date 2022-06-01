@@ -15,9 +15,6 @@ read -p "Select SubRegion: " subregion
 ln -sf /usr/share/zoneinfo/$region/$subregion /etc/localtime
 hwclock --systohc
 
-#Troubleshooting
-read -p "Press anykey to continue" stop
-
 #Localization
 sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
@@ -52,22 +49,13 @@ reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorli
 #Sync Pacman
 pacman -Syy
 
-#Troubleshooting
-read -p "Press anykey to continue" stop
-
 #Network Configuration
 hostn=$(sed -n '4{p;q}' temp.txt)
 echo $hostn > /etc/hostname
 
-#Troubleshooting
-read -p "Press anykey to continue" stop
-
 #Root Password
 rootpasswd=$(sed -n '5{p;q}' temp.txt)
 chpasswd <<<$rootpasswd
-
-#Troubleshooting
-read -p "Press anykey to continue" stop
 
 #MicroCode
 chip=$(sed -n '6{p;q}' temp.txt)
@@ -76,9 +64,6 @@ if [ $chip == 1 ]; then
 else
 	pacman -S --noconfirm amd-ucode
 fi
-
-#Troubleshooting
-read -p "Press anykey to continue" stop
 
 #Bootloader Install and Config
 pacman -S --noconfirm grub

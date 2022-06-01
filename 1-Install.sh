@@ -59,8 +59,6 @@ else
 	w
 EEOF
 fi
-#Troubleshooting
-read -p "Press anykey to continue" stop
 
 #Create SWAP
 #Need SWAP?
@@ -91,9 +89,6 @@ EEOF
 	fi
 fi
 
-#Troubleshooting
-read -p "Press anykey to continue" stop
-
 #Bootloader Partition
 #Need EFI?
 if [ $efiyes == 1 ];then
@@ -117,9 +112,6 @@ else
 EEOF
 fi
 
-#Troubleshooting
-read -p "Press anykey to continue" stop
-
 #Root Partition
 if [ $efiyes == 1 ];then
 	sgdisk -n 3::-0 -t 3:8300 $disk  
@@ -137,14 +129,8 @@ else
 EEOF
 fi
 
-#Troubleshooting
-read -p "Press anykey to continue" stop
-
 #Read new partiton table 
 partprobe
-
-#Troubleshooting
-read -p "Press anykey to continue" stop
 
 #File System
 #SWAP
@@ -161,10 +147,6 @@ fi
 
 #Root
 mkfs.ext4 $rootdir
-
-#Troubleshooting
-read -p "Press anykey to continue" stop
-
 
 #Mount Disk Partitions
 #SWAP
@@ -185,9 +167,6 @@ else
 	mount $EFIdir /mnt/boot/EFI
 fi
 
-#Troubleshooting
-read -p "Press anykey to continue" stop
-
 #Base Install
 pacstrap /mnt base base-devel linux linux-firmware vim networkmanager  
 
@@ -200,3 +179,6 @@ cp -r /root/SickArch /mnt
 
 #Get To New Arch Install
 arch-chroot /mnt
+
+#Umount Everything
+umount -R /mnt

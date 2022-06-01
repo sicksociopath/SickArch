@@ -3,17 +3,15 @@
 chipg=$(sed -n '7{p;q}' temp.txt)
 username=$(sed -n '8{p;q}' temp.txt)
 usernamepasswd=$(sed -n '9{p;q}' temp.txt)
-user_libvirt=$(sed -n '11{p;q}' temp.txt)
-group_libvirt=$(sed -n '12{p;q}' temp.txt)
-qemu_group_libvirt=$(sed -n '13{p;q}' temp.txt)
-qemu_ro_libvirt=$(sed -n '14{p;q}' temp.txt)
-qemu_rw_libvirt=$(sed -n '15{p;q}' temp.txt)
+line82libvirtd=$(sed -n '13{p;q}' temp.txt)
+line93libvirtd=$(sed -n '14{p;q}' temp.txt)
+line107libvirtd=$(sed -n '15{p;q}' temp.txt)
+line520qemu=$(sed -n '11{p;q}' temp.txt)
+line525qemu=$(sed -n '12{p;q}' temp.txt)
 
 #Audio Install
 pacman -S --noconfirm alsa-card-profiles alsa-firmware alsa-plugins alsa-tools alsa-utils
 pacman -S --noconfirm pulseaudio pulseaudio-alsa 
-
-read -p "Press anykey to continue" stop
 
 #Video Card
 if [ $chipg == 1 ]; then
@@ -33,91 +31,61 @@ elif [ $chipg == 4 ]; then
 	pacman -S --noconfirm spice-vdagent xf86-video-qxl
 fi
 
-read -p "Press anykey to continue" stop
-
 #Xorg
 pacman -S --noconfirm xorg-server xorg-xhost
-
-read -p "Press anykey to continue" stop
 
 #Config Mouse and Keyboard
 cp 00-keyboard.conf /etc/X11/xorg.conf.d
 cp 10-libinput.conf /etc/X11/xorg.conf.d
 
-read -p "Press anykey to continue" stop
-
 #Install ZSH
 pacman -S --noconfirm zsh
-
-read -p "Press anykey to continue" stop
 
 #User
 useradd -m -G audio,video,storage,wheel,adm,ftp,games,http,log,rfkill,sys,systemd-journal,uucp -s /bin/zsh $username 
 chpasswd <<<$usernamepasswd
 
-read -p "Press anykey to continue" stop
-
 #Install Terminal
 pacman -S --noconfirm alacritty
-
-read -p "Press anykey to continue" stop
 
 #Install Shell Tools
 pacman -S --noconfirm git neofetch htop ntfs-3g zip unzip android-tools aria2 rust
 
-read -p "Press anykey to continue" stop
-
 #Fonts
 pacman -S --noconfirm ttf-fira-code
 pacman -S --noconfirm ttf-dejavu
-
-read -p "Press anykey to continue" stop
 
 #Ubuntu
 aria2c https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Ubuntu.zip 
 mkdir /usr/share/fonts/ubuntu
 unzip Ubuntu.zip -d /usr/share/fonts/ubuntu 
 
-read -p "Press anykey to continue" stop
-
 #UbuntuMono
 aria2c https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/UbuntuMono.zip
 mkdir /usr/share/fonts/UbuntuMono
 unzip UbuntuMono.zip -d /usr/share/fonts/UbuntuMono
-
-read -p "Press anykey to continue" stop
 
 #Hack
 aria2c https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip 
 mkdir /usr/share/fonts/Hack
 unzip Hack.zip -d /usr/share/fonts/Hack
 
-read -p "Press anykey to continue" stop
-
 #Looks
 pacman -S --noconfirm qtile rofi lightdm lightdm-webkit2-greeter feh
 pacman -S --noconfirm qt5ct lxappearance 
 pacman -S --noconfirm breeze-gtk
 
-read -p "Press anykey to continue" stop
-
 #Web Browser
 pacman -S --noconfirm firefox
-
-read -p "Press anykey to continue" stop
 
 #Tools
 pacman -S --noconfirm mupdf
 pacman -S --noconfirm keepassxc mpv signal-desktop thunderbird nm-connection-editor network-manager-applet pavucontrol
 
-read -p "Press anykey to continue" stop
-
 #ani-cli
 git clone https://github.com/pystardust/ani-cli
-chmod +x /ani-cli/ani-cli
-cp /ani-cli/usr/local/bin/
-
-read -p "Press anykey to continue" stop
+chmod +x ani-cli/ani-cli
+cp ani-cli/ani-cli /usr/local/bin/
 
 #Move Wallpaper
 mkdir /home/$username/Pictures
@@ -127,36 +95,22 @@ chown $username:$username /home/$username/Pictures/Wallpapers
 cp Wallpaper_2.jpg /home/$username/Pictures/Wallpapers
 chown $username:$username /home/$username/Pictures/Wallpapers/Wallpaper_2.jpg
 
-read -p "Press anykey to continue" stop
-
 #Move Config
 mkdir /home/$username/.config
 mkdir /home/$username/.config/alacritty
 chown $username:$username /home/$username/.config/
 chown $username:$username /home/$username/.config/alacritty
 
-read -p "Press anykey to continue" stop
-
 cp alacritty.yml /home/$username/.config/alacritty
-
-read -p "Press anykey to continue" stop
 
 chown $username:$username /home/$username/.config/alacritty/alacritty.yml
 
-read -p "Press anykey to continue" stop
-
 mkdir /home/$username/.config/qtile
-
-read -p "Press anykey to continue" stop
 
 chown $username:$username /home/$username/.config/qtile
 
-read -p "Press anykey to continue" stop
-
 sed -i "157 i os.system(\"feh --bg-fill /home/$username/Pictures/Wallpapers/Wallpaper_2.jpg\")" config.py
 cp config.py /home/$username/.config/qtile/
-
-read -p "Press anykey to continue" stop
 
 chown $username:$username /home/$username/.config/qtile/config.py
 
@@ -169,11 +123,11 @@ pacman -S --noconfirm virt-manager virt-viewer
 usermod -aG libvirt $username
 
 #Edit Configs for Virt-Manager
-sed -i "520 i $user_qemu" /etc/libvirt/qemu.conf
-sed -i "525 i $group_qemu" /etc/libvirt/qemu.conf
-sed -i "82 i $group_libvirt" /etc/libvirt/libvirtd.conf
-sed -i "93 i $ro_libvirt" /etc/libvirt/libvirtd.conf
-sed -i "107 i $rw_libvirt" /etc/libvirt/libvirtd.conf
+sed -i "82 i $line82libvirtd" /etc/libvirt/libvirtd.conf
+sed -i "93 i $line93libvirtd" /etc/libvirt/libvirtd.conf
+sed -i "107 i $line107libvirtd" /etc/libvirt/libvirtd.conf
+sed -i "520 i $line520qemu" /etc/libvirt/qemu.conf
+sed -i "525 i $line525qemu" /etc/libvirt/qemu.conf
 
 #Start libvirt service
 systemctl enable libvirtd --now
@@ -193,9 +147,9 @@ sed '140d' /etc/makepkg.conf
 sed -i "139 i COMPRESSXZ=(xz -c -z --threads=0 -)" /etc/makepkg.conf
 sed -i "140 i COMPRESSZST=(zstd -c -z -q --threads=0 -)" /etc/makepkg.conf
 
-#Install PARU
-git clone https://aur.archlinux.org/paru.git
-cd paru
-makepkg -si
-cd /SickArch
-rm -rf paru
+##Install PARU
+#git clone https://aur.archlinux.org/paru.git
+#cd paru
+#makepkg -si
+#cd /SickArch
+#rm -rf paru
