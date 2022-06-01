@@ -9,8 +9,8 @@ from libqtile.utils import guess_terminal
 import os
 
 #Key used for special actions
-#mod = "mod4"    #SuperKey
-mod = "mod4"     #Alt-Rigth
+#mod = "mod5"     #Alt-Rigth
+mod = "mod4"    #SuperKey
 
 #Used terminal
 terminal = "alacritty"
@@ -49,8 +49,10 @@ keys = [
         lazy.spawn("amixer -c 0 sset Master 2- unmute")),
     Key([], "XF86AudioRaiseVolume",
         lazy.spawn("amixer -c 0 sset Master 2+ unmute")),
-    #Launch Rofi
+    #Rofi Launcher
     Key(["mod1"], "space", lazy.spawn("rofi -show run")),
+    #Rofi Window
+    Key(["mod1", "shift"], "space", lazy.spawn("rofi -show window")),
     #Launch Termianal
     Key([mod], "Return", lazy.spawn(terminal)),
     #Firefox Profiles
